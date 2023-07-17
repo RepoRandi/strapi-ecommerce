@@ -15,6 +15,8 @@ module.exports = createCoreController(
 
       if (requestData.transaction_status == "settlement") {
         params = { data: { orderStatus: "purchased" } };
+      } else if (requestData.transaction_status == "pending") {
+        params = { data: { orderStatus: "waitingPayment" } };
       } else {
         params = { data: { orderStatus: "cancel" } };
       }
@@ -22,8 +24,6 @@ module.exports = createCoreController(
       let updateOrder = await strapi
         .service("api::order.order")
         .update(requestData.order_id, params);
-
-      console.log("update data: ", updateOrder);
 
       return { data: updateOrder };
     },
